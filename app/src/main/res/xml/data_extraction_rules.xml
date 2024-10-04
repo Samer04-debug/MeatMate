@@ -5,10 +5,12 @@
 -->
 <data-extraction-rules>
     <cloud-backup>
-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
-        <include .../>
-        <exclude .../>
-        -->
+        <!-- Include specific directories or files for backup -->
+        <include domain="file" path="my_data/important_data.json" />
+        <include domain="database" ref="user_data" />
+
+        <!-- Exclude other files from backup -->
+        <exclude domain="file" path="cache/" />
     </cloud-backup>
     <!--
     <device-transfer>
