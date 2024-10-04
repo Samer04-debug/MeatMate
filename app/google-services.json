@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "384389312049",
+    "project_id": "meatmate-application",
+    "storage_bucket": "meatmate-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:384389312049:android:6e090ff1d9fd15da9def10",
+        "android_client_info": {
+          "package_name": "com.example.meatmateapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1vMcP5h6cL9E5gcEJVj3JyeJccrT7-ew"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
