@@ -1,28 +1,32 @@
 package com.example.meatmateapplication.Activity;
 
+
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
+import android.view.Window;
+import android.view.WindowManager;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.example.meatmateapplication.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+
 public class BaseActivity extends AppCompatActivity {
-FirebaseAuth mAuth;
-FirebaseDatabase database;
-public String TAG="uilover";
+    FirebaseAuth mAuth;
+    FirebaseDatabase database;
+    public String TAG = "uilover";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        database=FirebaseDatabase.getInstance();
-        mAuth=FirebaseAuth.getInstance();
+        // Initialize Firebase instances
+        database = FirebaseDatabase.getInstance();
+        mAuth = FirebaseAuth.getInstance();
 
-        getWindow().setStatusBarColor(getResources().getColor(R.color.white));
-    }
+        // Set the window flags for full screen
+        Window w = getWindow();
+        w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+
+
+}
 }

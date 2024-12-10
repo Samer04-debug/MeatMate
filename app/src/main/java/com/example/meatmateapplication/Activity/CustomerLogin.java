@@ -1,149 +1,145 @@
 package com.example.meatmateapplication.Activity;
 
+import androidx.annotation.NonNull;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
+import com.example.meatmateapplication.Activity.ReusableCode.ReusableCodeForAll;
 import com.example.meatmateapplication.R;
-import com.example.meatmateapplication.databinding.ActivityCustomerLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
-import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.FirebaseException;
 
-
-
-import java.util.concurrent.TimeUnit;
-
-public class CustomerLogin extends AppCompatActivity {
-    ActivityCustomerLoginBinding binding;
+public class CustomerLogin extends BaseActivity {
+    TextInputLayout email,pass;
+    Button Signin,Signinphone;
+    TextView Forgotpassword , signup;
     FirebaseAuth mAuth;
-    private String verificationId;
+    String emailid,pwd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityCustomerLoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_customer_login);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        try{
 
-        mAuth = FirebaseAuth.getInstance();
-        setVariable();
-    }
+            email = (TextInputLayout)findViewById(R.id.Lemail);
+            pass = (TextInputLayout)findViewById(R.id.Lpassword);
+            Signin = (Button)findViewById(R.id.button4);
+            signup = (TextView) findViewById(R.id.textView4);
+            Forgotpassword = (TextView)findViewById(R.id.forgotpass);
+            Signinphone = (Button)findViewById(R.id.btnphone);
 
-    private void setVariable() {
-        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String input = binding.userlogEdt.getText().toString();
-                String password = binding.passlogEdt.getText().toString();
+            mAuth = FirebaseAuth.getInstance();
 
-                if (input.isEmpty()) {
-                    Toast.makeText(CustomerLogin.this, "Please enter email address/phone number and password", Toast.LENGTH_SHORT).show();
-                    return;
+            Signin.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    emailid = email.getEditText().getText().toString().trim();
+                    pwd = pass.getEditText().getText().toString().trim();
+
+                    if(isValid()){
+
+                        final ProgressDialog mDialog = new ProgressDialog(CustomerLogin.this);
+                        mDialog.setCanceledOnTouchOutside(false);
+                        mDialog.setCancelable(false);
+                        mDialog.setMessage("Sign In Please Wait.......");
+                        mDialog.show();
+
+                        mAuth.signInWithEmailAndPassword(emailid,pwd).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+
+                                if(task.isSuccessful()){
+                                    mDialog.dismiss();
+
+                                    if(mAuth.getCurrentUser().isEmailVerified()){
+                                        mDialog.dismiss();
+                                        Toast.makeText(CustomerLogin.this, "Congratulation! You Have Successfully Login", Toast.LENGTH_SHORT).show();
+                                        Intent Z = new Intent(CustomerLogin.this,CustomerFoodPanel_BottomNavigation.class);
+                                        startActivity(Z);
+                                        finish();
+
+                                    }else{
+                                        ReusableCodeForAll.ShowAlert(CustomerLogin.this,"Verification Failed","You Have Not Verified Your Email");
+
+                                    }
+                                }else{
+                                    mDialog.dismiss();
+                                    ReusableCodeForAll.ShowAlert(CustomerLogin.this,"Error",task.getException().getMessage());
+                                }
+                            }
+                        });
+                    }
                 }
-
-                if (!password.isEmpty()) {
-                    // Check if input is an email or phone number (assuming +63 or 09 for phone numbers)
-                    if (input.contains("@")) {
-                        // Email login
-                        loginWithEmail(input, password);
-                    } else {
-                        // Phone number login
-                        loginWithPhoneNumber(input);
-                    }
-                } else {
-                    Toast.makeText(CustomerLogin.this, "Please enter password", Toast.LENGTH_SHORT).show();
+            });
+            signup.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(CustomerLogin.this,CustomerSignup.class));
+                    finish();
                 }
+            });
+            Forgotpassword.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(CustomerLogin.this,CustomerForgotPassword.class));
+                    finish();
+                }
+            });
+            Signinphone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(CustomerLogin.this,CustomerLoginphone.class));
+                    finish();
+                }
+            });
+        }catch (Exception e){
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        }
+
+    }
+    String emailpattern  = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+    public boolean isValid(){
+
+        email.setErrorEnabled(false);
+        email.setError("");
+        pass.setErrorEnabled(false);
+        pass.setError("");
+
+        boolean isvalid=false,isvalidemail=false,isvalidpassword=false;
+        if(TextUtils.isEmpty(emailid)){
+            email.setErrorEnabled(true);
+            email.setError("Email is required");
+        }else{
+            if(emailid.matches(emailpattern)){
+                isvalidemail=true;
+            }else{
+                email.setErrorEnabled(true);
+                email.setError("Invalid Email Address");
             }
-        });
+        }
+        if(TextUtils.isEmpty(pwd)){
 
-        binding.signuptxtBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(CustomerLogin.this, CustomerSignup.class));
-            }
-        });
+            pass.setErrorEnabled(true);
+            pass.setError("Password is Required");
+        }else{
+            isvalidpassword=true;
+        }
+        isvalid=(isvalidemail && isvalidpassword)?true:false;
+        return isvalid;
     }
 
-    private void loginWithEmail(String email, String password) {
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(CustomerLogin.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            startActivity(new Intent(CustomerLogin.this, MenuActivity.class));
-                            finish();
-                        } else {
-                            Toast.makeText(CustomerLogin.this, "Authentication failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
-
-    private void loginWithPhoneNumber(String phoneNumber) {
-        // Send verification code to the phone number (assuming country code +63 for Philippines)
-        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(mAuth)
-                .setPhoneNumber(phoneNumber.startsWith("+63") ? phoneNumber : "+63" + phoneNumber.substring(1))  // format phone number to +63
-                .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(this)
-                .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                    @Override
-                    public void onVerificationCompleted(@NonNull PhoneAuthCredential credential) {
-                        // Auto verification
-                        signInWithPhoneAuthCredential(credential);
-                    }
-
-                    @Override
-                    public void onVerificationFailed(@NonNull FirebaseException e) {
-                        Toast.makeText(CustomerLogin.this, "Verification Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
-                        super.onCodeSent(verificationId, token);
-                        CustomerLogin.this.verificationId = verificationId;
-                        // Redirect to code input activity
-                        Intent intent = new Intent(CustomerLogin.this, SignupVerification.class);
-                        intent.putExtra("verificationId", verificationId);
-                        intent.putExtra("phoneNumber", phoneNumber);
-                        startActivity(intent);
-                    }
-                })
-                .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
-    }
-
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, navigate to menu
-                            startActivity(new Intent(CustomerLogin.this, MenuActivity.class));
-                            finish();
-                        } else {
-                            // Sign in failed
-                            Toast.makeText(CustomerLogin.this, "Phone Authentication Failed", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-    }
 }

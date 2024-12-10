@@ -2,7 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="34" />
 
     <application
         android:allowBackup="true"
@@ -15,10 +25,136 @@
         android:theme="@style/Theme.MeatMateApplication"
         tools:targetApi="31">
         <activity
-            android:name=".Activity.SignupVerification"
+            android:name=".Activity.SendOTP"
             android:exported="false" />
         <activity
-            android:name=".Activity.MenuActivity"
+            android:name=".Activity.VerifyPhone"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.customerFoodPanel.OrderMeat"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.customerFoodPanel.CustomerPhoneSendOTP"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.customerFoodPanel.CustomerPhoneNumber"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.customerFoodPanel.CustomerPaymentOTP"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.customerFoodPanel.CustomerPayment"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.customerFoodPanel.CustomerOnlinePayment"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.customerFoodPanel.PendingOrders"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.customerFoodPanel.PayableOrders"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.deliveryFoodPanel.DeliveryPendingOrderView"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.deliveryFoodPanel.DeliveryShipOrderView"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.deliveryFoodPanel.Delivery_ShippingOrder"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.customerFoodPanel.CustomerPassword"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.customerFoodPanel.CustomerForgotPassword"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.adminFoodPanel.Update_Delete_Meat"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.adminFoodPanel.AdminOrderToBePreparedView"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.adminFoodPanel.AdminOrderToBePrepared"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.adminFoodPanel.AdminOrderMeatsAdapater"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.adminFoodPanel.Admin_order_meats"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.adminFoodPanel.AdminPreparedOrderView"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.adminFoodPanel.AdminPreparedOrder"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.adminFoodPanel.admin_postMeat"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.CourierVerifyPhone"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Couriersendotp"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.CourierForgotPassword"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Customersendotp"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.CustomerVerifyPhone"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.CustomerForgotPassword"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.CourierSignup"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.CourierLoginphone"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.CustomerLoginphone"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.MainMenu"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AuthCheckActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.DeliveryFoodPanel_BottomNavigation"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AdminForgotPassword"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Adminsendotp"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.Adminloginphone"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AdminFoodPanel_BottomNavigation"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AdminVerifyPhone"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AdminSignup"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.CourierLogin"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.AdminLogin"
+            android:exported="false" />
+        <activity
+            android:name=".Activity.CustomerFoodPanel_BottomNavigation"
             android:exported="false" />
         <activity
             android:name=".Activity.CustomerSignup"
@@ -29,11 +165,6 @@
         <activity
             android:name=".Activity.BaseActivity"
             android:exported="false" />
-
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-
         <activity
             android:name=".Activity.IntroActivity"
             android:exported="true">
@@ -42,10 +173,31 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- Define the MainActivity -->
+        </activity>
         <activity
             android:name=".Activity.MainActivity"
             android:exported="true" />
+
+        <service
+            android:name=".Activity.SendNotification.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".Activity.SendNotification.MyFirebaseIdService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

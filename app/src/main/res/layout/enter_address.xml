@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/LA"
+        android:layout_width="match_parent"
+        android:layout_height="67dp"
+        android:hint="Local Address" />
+
+    <EditText
+        android:id="@+id/addnote"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:hint="Additional Notes" />
+
+    <RadioGroup
+        android:id="@+id/grp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/HA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home Address"/>
+
+        <RadioButton
+            android:id="@+id/OA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Other Address"/>
+    </RadioGroup>
+</LinearLayout>
